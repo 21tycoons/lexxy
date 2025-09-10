@@ -32,9 +32,9 @@ export default class LexicalEditorElement extends HTMLElement {
   }
 
   connectedCallback() {
-    this.id ??= generateDomId("lexxy-editor")
-    this.editor = this.#createEditor()
-    this.contents = new Contents(this)
+    this.id      ??= generateDomId("lexxy-editor")
+    this.editor    = this.#createEditor()
+    this.contents  = new Contents(this)
     this.selection = new Selection(this)
     this.clipboard = new Clipboard(this)
 
