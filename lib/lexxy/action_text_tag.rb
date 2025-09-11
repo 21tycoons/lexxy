@@ -6,7 +6,7 @@ module Lexxy
       @block = block
     end
 
-    def render
+    def lexxy_render
       options = @options.stringify_keys
 
       add_default_name_and_id(options)
