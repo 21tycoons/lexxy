@@ -5827,10 +5827,6 @@ class ActionTextAttachmentUploadNode extends ActionTextAttachmentNode {
       if (error) {
         this.#handleUploadError(figure);
       } else {
-        this.src = this.blobUrlTemplate
-          .replace(":signed_id", blob.signed_id)
-          .replace(":filename", encodeURIComponent(blob.filename));
-
         this.#loadFigurePreviewFromBlob(blob, figure).then(() => {
           this.#showUploadedAttachment(figure, blob);
         });
@@ -5848,11 +5844,14 @@ class ActionTextAttachmentUploadNode extends ActionTextAttachmentNode {
     this.editor.update(() => {
       const image = figure.querySelector("img");
 
+      const src = this.blobUrlTemplate
+                    .replace(":signed_id", blob.signed_id)
+                    .replace(":filename", encodeURIComponent(blob.filename));
       const latest = us(this.getKey());
       if (latest) {
         latest.replace(new ActionTextAttachmentNode({
           sgid: blob.attachable_sgid,
-          src: blob.previewable ? blob.url : this.src,
+          src: blob.previewable ? blob.url : src,
           altText: blob.filename,
           contentType: blob.content_type,
           fileName: blob.filename,
@@ -8549,5 +8548,10 @@ function highlightElement(preElement) {
   const codeElement = createElement("code", { "data-language": language, innerHTML: highlightedHtml });
   preElement.replaceWith(codeElement);
 }
+
+// Manual highlighting mode to prevent invocation on every page. See https://prismjs.com/docs/prism
+// This must happen before importing any Prism components
+window.Prism = window.Prism || {};
+Prism.manual = true;
 
 export { highlightAll };
